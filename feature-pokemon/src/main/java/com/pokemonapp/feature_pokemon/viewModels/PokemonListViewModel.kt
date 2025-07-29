@@ -65,6 +65,7 @@ class PokemonListViewModel @Inject constructor(
                 _state.value = PokemonListState.Success(firstGenPokemons)
             } catch (e: Exception) {
                 if (!e.isCancellation()) {
+                    firstGenPokemons = emptyList()
                     _state.value = PokemonListState.Error(
                         message = "Failed to load Pokémon: ${e.message ?: "Unknown error"}"
                     )
@@ -80,7 +81,15 @@ class PokemonListViewModel @Inject constructor(
                 // Limpiar búsqueda al refrescar
                 _searchQuery.value = ""
                 _showSearchResults.value = false
-                loadFirstGenerationPokemons()
+                repository.clearCache() // Limpia el caché
+                firstGenPokemons = emptyList() // Resetea la lista local
+                loadFirstGenerationPokemons() // Vuelve a cargar
+            } catch (e: Exception) {
+                if (!e.isCancellation()) {
+                    _state.value = PokemonListState.Error(
+                        message = "Failed to refresh: ${e.message ?: "Unknown error"}"
+                    )
+                }
             } finally {
                 _isRefreshing.value = false
             }
