@@ -38,6 +38,11 @@ class PokemonListViewModel @Inject constructor(
 
     private var lastQuery: String = ""
 
+    // Estado para el refresco
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
+
     init {
         loadFirstGenerationPokemons()
     }
@@ -64,6 +69,20 @@ class PokemonListViewModel @Inject constructor(
                         message = "Failed to load Pokémon: ${e.message ?: "Unknown error"}"
                     )
                 }
+            }
+        }
+    }
+
+    fun refreshData() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            try {
+                // Limpiar búsqueda al refrescar
+                _searchQuery.value = ""
+                _showSearchResults.value = false
+                loadFirstGenerationPokemons()
+            } finally {
+                _isRefreshing.value = false
             }
         }
     }

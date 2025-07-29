@@ -91,6 +91,9 @@ dependencies {
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
+
+    //Refresh Swiperefresh
+    implementation(libs.accompanist.swiperefresh)
 }
 
 kapt {

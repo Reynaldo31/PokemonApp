@@ -58,6 +58,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.pokemonapp.core.ui.components.ErrorView
 import com.pokemonapp.core.ui.components.LoadingView
 import com.pokemonapp.domain.model.PokemonListItem
@@ -73,49 +75,56 @@ fun PokemonListScreen(
     val state by viewModel.state.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val showSearchResults by viewModel.showSearchResults.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding((WindowInsets.statusBars.asPaddingValues())),
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing),
+        onRefresh = { viewModel.refreshData() },
+        modifier = Modifier.fillMaxSize()
     ) {
-        ImageWelcome(
+        Column(
             modifier = Modifier
-                .padding(end = 15.dp, top = 5.dp, bottom = 8.dp)
-                .wrapContentSize(Alignment.CenterStart),
-            R.drawable.iconpokedex
-        )
-        TextWelcome(
-            modifier = Modifier
-                .padding(horizontal = 15.dp, vertical = 5.dp)
-                .fillMaxWidth()
-        )
-        SearchBar(
-            query = searchQuery,
-            onQueryChange = viewModel::onSearchQueryChange,
-            modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
-        )
-
-        if (showSearchResults) {
-            Text(
-                text = "Resultados de búsqueda:",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    color = colorResource(id=R.color.grey2),
-                    fontWeight = FontWeight.Bold
-                ),
+                .fillMaxSize()
+                .padding((WindowInsets.statusBars.asPaddingValues())),
+        ) {
+            ImageWelcome(
                 modifier = Modifier
-                    .padding(horizontal = 15.dp, vertical = 8.dp)
+                    .padding(end = 15.dp, top = 5.dp, bottom = 8.dp)
+                    .wrapContentSize(Alignment.CenterStart),
+                R.drawable.iconpokedex
+            )
+            TextWelcome(
+                modifier = Modifier
+                    .padding(horizontal = 15.dp, vertical = 5.dp)
                     .fillMaxWidth()
             )
-        }
-
-        when (val currentState = state) {
-            is PokemonListState.Loading -> LoadingView()
-            is PokemonListState.Error -> ErrorView(message = currentState.message)
-            is PokemonListState.Success -> PokemonGrid(
-                pokemons = currentState.pokemons,
-                onPokemonClick = onPokemonClick
+            SearchBar(
+                query = searchQuery,
+                onQueryChange = viewModel::onSearchQueryChange,
+                modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
             )
+
+            if (showSearchResults) {
+                Text(
+                    text = "Resultados de búsqueda:",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = colorResource(id = R.color.grey2),
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier
+                        .padding(horizontal = 15.dp, vertical = 8.dp)
+                        .fillMaxWidth()
+                )
+            }
+
+            when (val currentState = state) {
+                is PokemonListState.Loading -> LoadingView()
+                is PokemonListState.Error -> ErrorView(message = currentState.message)
+                is PokemonListState.Success -> PokemonGrid(
+                    pokemons = currentState.pokemons,
+                    onPokemonClick = onPokemonClick
+                )
+            }
         }
     }
 }
@@ -254,13 +263,13 @@ fun PokemonCard(
             .fillMaxWidth()
             .height(170.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = colorResource(id=R.color.white))
+        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.white))
     ) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
             Text(
-                text = "#${pokemon.id.toString().padStart(3,'0')}",
+                text = "#${pokemon.id.toString().padStart(3, '0')}",
                 style = MaterialTheme.typography.labelSmall.copy(
                     color = colorResource(R.color.grey1)
                 ),
@@ -270,7 +279,9 @@ fun PokemonCard(
             AsyncImage(
                 model = pokemon.imageUrl,
                 contentDescription = pokemon.name,
-                modifier = Modifier.size(80.dp).align(Alignment.CenterHorizontally),
+                modifier = Modifier
+                    .size(80.dp)
+                    .align(Alignment.CenterHorizontally),
                 error = painterResource(id = R.drawable.pokemon_placeholder),
             )
             Spacer(modifier = Modifier.height(8.dp))
