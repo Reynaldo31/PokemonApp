@@ -12,6 +12,10 @@ class PokemonRepositoryImpl @Inject constructor(private val api: PokeApiService)
     PokemonRepository {
     private var cachedPokemons: List<PokemonListItem>? = null
 
+    override suspend fun clearCache() {
+        cachedPokemons = null
+    }
+
     override suspend fun getFirstGenerationPokemons(): List<PokemonListItem> {
         return cachedPokemons ?: run {
             val response = api.getPokemonList(limit = 151)
