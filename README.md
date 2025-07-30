@@ -141,6 +141,10 @@ UI (Compose) → ViewModel → Use Cases ← Repositories ← Data Sources (API)
 
 - Pull-to-refresh
    - implementation("com.google.accompanist:accompanist-swiperefresh:0.27.0")
+ 
+## Capturas de pantalla
+
+
 
 ## Licencia
 
