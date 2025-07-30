@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -58,8 +59,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.pokemonapp.core.ui.components.ErrorView
 import com.pokemonapp.core.ui.components.LoadingView
+import com.pokemonapp.core.ui.components.NotFoundView
+import com.pokemonapp.core.ui.components.WarningView
 import com.pokemonapp.domain.model.PokemonListItem
 import com.pokemonapp.feature_pokemon.R
 import com.pokemonapp.feature_pokemon.viewModels.PokemonListState
@@ -73,49 +78,58 @@ fun PokemonListScreen(
     val state by viewModel.state.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val showSearchResults by viewModel.showSearchResults.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding((WindowInsets.statusBars.asPaddingValues())),
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing),
+        onRefresh = { viewModel.refreshData() },
+        modifier = Modifier.fillMaxSize()
     ) {
-        ImageWelcome(
+        Column(
             modifier = Modifier
-                .padding(end = 15.dp, top = 5.dp, bottom = 8.dp)
-                .wrapContentSize(Alignment.CenterStart),
-            R.drawable.iconpokedex
-        )
-        TextWelcome(
-            modifier = Modifier
-                .padding(horizontal = 15.dp, vertical = 5.dp)
-                .fillMaxWidth()
-        )
-        SearchBar(
-            query = searchQuery,
-            onQueryChange = viewModel::onSearchQueryChange,
-            modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
-        )
-
-        if (showSearchResults) {
-            Text(
-                text = "Resultados de búsqueda:",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    color = colorResource(id=R.color.grey2),
-                    fontWeight = FontWeight.Bold
-                ),
+                .fillMaxSize()
+                .padding((WindowInsets.statusBars.asPaddingValues())),
+        ) {
+            ImageWelcome(
                 modifier = Modifier
-                    .padding(horizontal = 15.dp, vertical = 8.dp)
+                    .padding(end = 15.dp, top = 5.dp, bottom = 8.dp)
+                    .wrapContentSize(Alignment.CenterStart),
+                R.drawable.iconpokedex
+            )
+            TextWelcome(
+                modifier = Modifier
+                    .padding(horizontal = 15.dp, vertical = 5.dp)
                     .fillMaxWidth()
             )
-        }
-
-        when (val currentState = state) {
-            is PokemonListState.Loading -> LoadingView()
-            is PokemonListState.Error -> ErrorView(message = currentState.message)
-            is PokemonListState.Success -> PokemonGrid(
-                pokemons = currentState.pokemons,
-                onPokemonClick = onPokemonClick
+            SearchBar(
+                query = searchQuery,
+                onQueryChange = viewModel::onSearchQueryChange,
+                modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
             )
+
+            if (showSearchResults) {
+                Text(
+                    text = "Resultados de búsqueda:",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = colorResource(id = R.color.grey2),
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier
+                        .padding(horizontal = 15.dp, vertical = 8.dp)
+                        .fillMaxWidth()
+                )
+            }
+
+            when (val currentState = state) {
+                is PokemonListState.Loading -> LoadingView()
+                is PokemonListState.Error -> ErrorView(message = currentState.message)
+                is PokemonListState.Warning -> WarningView(message = currentState.message)
+                is PokemonListState.NotFound -> NotFoundView(message = currentState.message)
+                is PokemonListState.Success -> PokemonGrid(
+                    pokemons = currentState.pokemons,
+                    onPokemonClick = onPokemonClick
+                )
+            }
         }
     }
 }
@@ -144,7 +158,7 @@ fun ImageWelcome(
 fun TextWelcome(modifier: Modifier = Modifier) {
     Text(
         buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Color(0xFF01243A))) {
+            withStyle(style = SpanStyle(color = colorResource(id=R.color.name_pokemon))) {
                 append("¡Hello, ")
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                     append("welcome")
@@ -172,16 +186,15 @@ fun SearchBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .shadow(2.dp, shape)
-            .border(width = 1.5.dp, color = borderColor, shape = shape)
+            .shadow(1.dp, shape)
+            .border(width = 1.dp, color = borderColor, shape = shape)
             .background(Color.White, shape)
-            .padding(horizontal = 12.dp)
+            .padding(horizontal = 8.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 20.dp)
         ) {
             TextField(
                 value = query,
@@ -189,7 +202,7 @@ fun SearchBar(
                 placeholder = {
                     Text(
                         text = "Search",
-                        color = borderColor // color del borde
+                        color = borderColor
                     )
                 },
                 modifier = Modifier
@@ -254,15 +267,16 @@ fun PokemonCard(
             .fillMaxWidth()
             .height(170.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = colorResource(id=R.color.white))
+        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.white))
     ) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
             Text(
-                text = "#${pokemon.id.toString().padStart(3,'0')}",
+                text = "#${pokemon.id.toString().padStart(3, '0')}",
                 style = MaterialTheme.typography.labelSmall.copy(
-                    color = colorResource(R.color.grey1)
+                    color = colorResource(R.color.grey1),
+                    fontSize = 13.sp
                 ),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.End
@@ -270,8 +284,10 @@ fun PokemonCard(
             AsyncImage(
                 model = pokemon.imageUrl,
                 contentDescription = pokemon.name,
-                modifier = Modifier.size(80.dp).align(Alignment.CenterHorizontally),
-                error = painterResource(id = R.drawable.pokemon_placeholder),
+                modifier = Modifier
+                    .size(80.dp)
+                    .align(Alignment.CenterHorizontally),
+                error = painterResource(id = R.drawable.iconimgfailed),
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(

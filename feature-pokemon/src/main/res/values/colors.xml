@@ -15,4 +15,5 @@
     <color name="text_Physical2">#2C85BC</color>
     <color name="background_default">#F8F8F8</color>
     <color name="loading_color">#005FFF</color>
+    <color name="warning_color">#FFFFC107</color>
 </resources>
