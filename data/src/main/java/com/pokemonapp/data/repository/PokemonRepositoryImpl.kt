@@ -43,7 +43,7 @@ class PokemonRepositoryImpl @Inject constructor(private val api: PokeApiService)
                             id = id,
                             name = result.name.replaceFirstChar { it.uppercase() },
                             imageUrl = details?.sprites?.other?.home?.frontDefault
-                                ?: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",
+                                ?: "$BASE_POKEMON_IMAGE_URL/$id.png",
                             types = details?.types?.map { it.type.name } ?: emptyList()
                         )
                     }
