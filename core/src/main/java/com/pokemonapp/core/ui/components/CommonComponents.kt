@@ -17,6 +17,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -63,7 +64,7 @@ fun ErrorView(
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -87,6 +88,84 @@ fun ErrorView(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.errorContainer,
                     contentColor = MaterialTheme.colorScheme.onErrorContainer
+                )
+            ) {
+                Text("Try Again")
+            }
+        }
+    }
+}
+
+@Composable
+fun WarningView(
+    message: String,
+    onRetry: (() -> Unit)? = null,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Warning,
+            contentDescription = "Warning",
+            tint = colorResource(id=R.color.warning_color),
+            modifier = Modifier.size(48.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 32.dp)
+        )
+        onRetry?.let {
+            Spacer(modifier = Modifier.height(24.dp))
+            Button(
+                onClick = it,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id=R.color.warning_color),
+                    contentColor = colorResource(id=R.color.warning_color),
+                )
+            ) {
+                Text("Try Again")
+            }
+        }
+    }
+}
+
+@Composable
+fun NotFoundView(
+    message: String,
+    onRetry: (() -> Unit)? = null,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Warning,
+            contentDescription = "Warning",
+            tint = colorResource(id=R.color.text_Physical),
+            modifier = Modifier.size(48.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 32.dp)
+        )
+        onRetry?.let {
+            Spacer(modifier = Modifier.height(24.dp))
+            Button(
+                onClick = it,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id=R.color.text_Physical),
+                    contentColor = colorResource(id=R.color.text_Physical),
                 )
             ) {
                 Text("Try Again")

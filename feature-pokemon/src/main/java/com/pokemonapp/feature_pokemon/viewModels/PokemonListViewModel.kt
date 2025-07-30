@@ -38,6 +38,11 @@ class PokemonListViewModel @Inject constructor(
 
     private var lastQuery: String = ""
 
+    // Estado para el refresco
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
+
     init {
         loadFirstGenerationPokemons()
     }
@@ -60,10 +65,33 @@ class PokemonListViewModel @Inject constructor(
                 _state.value = PokemonListState.Success(firstGenPokemons)
             } catch (e: Exception) {
                 if (!e.isCancellation()) {
+                    firstGenPokemons = emptyList()
                     _state.value = PokemonListState.Error(
                         message = "Failed to load Pokémon: ${e.message ?: "Unknown error"}"
                     )
                 }
+            }
+        }
+    }
+
+    fun refreshData() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            try {
+                // Limpiar búsqueda al refrescar
+                _searchQuery.value = ""
+                _showSearchResults.value = false
+                repository.clearCache() // Limpia el caché
+                firstGenPokemons = emptyList() // Resetea la lista local
+                loadFirstGenerationPokemons() // Vuelve a cargar
+            } catch (e: Exception) {
+                if (!e.isCancellation()) {
+                    _state.value = PokemonListState.Error(
+                        message = "Failed to refresh: ${e.message ?: "Unknown error"}"
+                    )
+                }
+            } finally {
+                _isRefreshing.value = false
             }
         }
     }
@@ -91,7 +119,7 @@ class PokemonListViewModel @Inject constructor(
                 }
 
                 if (results.isEmpty()) {
-                    _state.value = PokemonListState.Error("No Pokémon found for '$currentQuery'")
+                    _state.value = PokemonListState.NotFound("No Pokémon found for '$currentQuery'")
                 } else {
                     _state.value = PokemonListState.Success(results)
                 }
@@ -108,7 +136,11 @@ class PokemonListViewModel @Inject constructor(
     private suspend fun searchInCache(query: String): List<PokemonListItem> {
         return firstGenPokemons.filter {
             it.name.contains(query, ignoreCase = true) ||
-                    it.id.toString().startsWith(query)
+                    try {
+                        query.replace("#", "").trim().toInt() == it.id
+                    } catch (e: NumberFormatException) {
+                        false
+                    }
         }
     }
 }
@@ -119,4 +151,6 @@ sealed class PokemonListState {
     object Loading : PokemonListState()
     data class Success(val pokemons: List<PokemonListItem>) : PokemonListState()
     data class Error(val message: String) : PokemonListState()
+    data class Warning(val message: String) : PokemonListState()
+    data class NotFound(val message: String) : PokemonListState()
 }
