@@ -145,6 +145,7 @@ UI (Compose) → ViewModel → Use Cases ← Repositories ← Data Sources (API)
 ## Capturas de pantalla
 
 ![Image_Alt](https://github.com/Reynaldo31/PokemonApp/blob/ef05b1f4e7fee8d88850a7955eeaa7394f437d05/captura%201.jpg)
+![Image_Alt](https://github.com/Reynaldo31/PokemonApp/blob/68cf4b1ec67e58b5f0c4165c6f102f79b74cf254/captura2.jpg)
 
 ## Licencia
 
