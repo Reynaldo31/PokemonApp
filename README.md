@@ -121,27 +121,27 @@ UI (Compose) → ViewModel → Use Cases ← Repositories ← Data Sources (API)
 
 ## Dependencias Principales:
 
-// Jetpack Compose
-implementation('androidx.activity:activity-compose:1.8.0')
-implementation("androidx.compose.ui:ui:1.5.0")
-implementation("androidx.compose.material3:material3:1.10.0")
+- Jetpack Compose
+   implementation('androidx.activity:activity-compose:1.8.0')
+   implementation("androidx.compose.ui:ui:1.5.0")
+   implementation("androidx.compose.material3:material3:1.10.0")
 
-// Navigation
-implementation("androidx.navigation:navigation-compose:2.7.7")
+- Navigation
+   implementation("androidx.navigation:navigation-compose:2.7.7")
 
-// Hilt (DI)
-implementation("com.google.dagger:hilt-android:2.51.1")
-kapt("com.google.dagger:hilt-compiler:2.0.21")
+- Hilt (DI)
+   implementation("com.google.dagger:hilt-android:2.51.1")
+   kapt("com.google.dagger:hilt-compiler:2.0.21")
 
-// Retrofit (API)
-implementation("com.squareup.retrofit2:retrofit:2.9.0")
-implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+- Retrofit (API)
+   implementation("com.squareup.retrofit2:retrofit:2.9.0")
+   implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-// Coil (Imágenes)
-implementation("io.coil-kt:coil-compose:2.7.0")
+- Coil (Imágenes)
+   implementation("io.coil-kt:coil-compose:2.7.0")
 
-// Pull-to-refresh
-implementation("com.google.accompanist:accompanist-swiperefresh:0.27.0")
+- Pull-to-refresh
+   implementation("com.google.accompanist:accompanist-swiperefresh:0.27.0")
 
 ##Licencia
 
@@ -156,12 +156,12 @@ Este proyecto está bajo la licencia MIT. Ver LICENSE para más detalles.
 - Abre un Pull Request
 
 ## FAQ
-¿Cómo cambio los colores de la app?
-Edita los colores en core/src/main/res/values/colors.xml
+- ¿Cómo cambio los colores de la app?
+   Edita los colores en core/src/main/res/values/colors.xml
 
-¿Cómo modifico la cantidad de Pokémon amostrar?
-Modifica el parámetro limit en PokemonRepositoryImpl.kt
+- ¿Cómo modifico la cantidad de Pokémon amostrar?
+   Modifica el parámetro limit en PokemonRepositoryImpl.kt
 
-¿Cómo cambio la API base?
-Edita PokeApiService.kt en el módulo data
+- ¿Cómo cambio la API base?
+   Edita PokeApiService.kt en el módulo data
 
