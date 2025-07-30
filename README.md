@@ -86,13 +86,12 @@ Ramas de trabajo
 ## Flujo de trabajo
 
 1. Crear ramas para cada característica:
-   -  ```bash
    - git checkout -b feature/pokemon-list
    - git checkout -b feature/pokemon-detail
     
 2. Desarrolla y haz commits descriptivos en ingles:
-  git commit -m "feat: Implement Pokemon list screen with search functionality"
-  git commit -m "fix: Resolve image loading issue in Pokemon detail"
+   - git commit -m "feat: Implement Pokemon list screen with search functionality"
+   - git commit -m "fix: Resolve image loading issue in Pokemon detail"
   
 3. Crea un Pull Request a develop
    - git checkout develop
