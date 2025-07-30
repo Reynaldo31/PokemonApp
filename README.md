@@ -35,7 +35,7 @@ Aplicación Android desarrollada en Android Studio(Kotlin) que muestra informaci
 ## Requisitos
 
 - Android Studio Giraffe (2022.3.1) o superior
-- Android SDK 37
+- Android SDK 36
 - Java 11
 
 ## Configuración Inicial
