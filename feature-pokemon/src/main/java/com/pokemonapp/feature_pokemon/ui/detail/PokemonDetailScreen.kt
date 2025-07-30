@@ -198,7 +198,7 @@ fun PokemonDetailContent(
                     .size(200.dp)
                     .align(Alignment.TopCenter)
                     .padding(top = 30.dp)
-                    .offset(y = (-70).dp),
+                    .offset(y = (-55).dp),
                 error = painterResource(id = R.drawable.pokemon_placeholder)
             )
         }
@@ -213,15 +213,14 @@ fun PokemonDetailContent(
                 .padding(horizontal = 24.dp)
         ) {
 
-            Spacer(modifier = Modifier.height(24.dp))
             //text description
             Text(
                 text = pokemon.description,
+                modifier = Modifier.padding(top = 10.dp),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     color = colorResource(id = R.color.grey3)
                 ),
             )
-            Spacer(modifier = Modifier.height(24.dp))
 
             // Physical characteristics
             Row(
@@ -350,7 +349,6 @@ fun PokemonDetailContent(
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
 
             Text(
                 text = "Abilities",
@@ -358,7 +356,7 @@ fun PokemonDetailContent(
                     color = colorResource(id = R.color.name_pokemon),
                     fontWeight = FontWeight.Bold
                 ),
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp).padding(top = 3.dp)
             )
 
             Column {
@@ -370,7 +368,7 @@ fun PokemonDetailContent(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(25.dp))
         }
     }
 }
@@ -410,15 +408,14 @@ fun StatItem(stat: Stat, primaryType: String? = null) {
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
                 .width(130.dp)
-                .padding(end = 3.dp),
+                .padding(end = 4.dp),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
 
         Box(
             modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 4.dp)
+                .weight(2f)
                 .height(10.dp)
                 .background(
                     color = progressColor.copy(alpha = 0.2f),
@@ -440,8 +437,8 @@ fun StatItem(stat: Stat, primaryType: String? = null) {
             text = stat.value.toString(),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
-                .width(30.dp)
-                .padding(start = 3.dp),
+                .width(35.dp)
+                .padding(start = 4.dp),
             textAlign = TextAlign.End,
             fontWeight = FontWeight.Bold
         )
@@ -464,7 +461,7 @@ fun PokemonDetailScreenPreview() {
                 stats = listOf(
                     Stat("hp", 35),
                     Stat("attack", 55),
-                    Stat("defense", 40),
+                    Stat("defense", 140),
                     Stat("special-attack", 50),
                     Stat("special-defense", 50),
                     Stat("speed", 90)

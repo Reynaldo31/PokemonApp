@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -185,16 +186,15 @@ fun SearchBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .shadow(2.dp, shape)
-            .border(width = 1.5.dp, color = borderColor, shape = shape)
+            .shadow(1.dp, shape)
+            .border(width = 1.dp, color = borderColor, shape = shape)
             .background(Color.White, shape)
-            .padding(horizontal = 12.dp)
+            .padding(horizontal = 8.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 20.dp)
         ) {
             TextField(
                 value = query,
@@ -202,7 +202,7 @@ fun SearchBar(
                 placeholder = {
                     Text(
                         text = "Search",
-                        color = borderColor // color del borde
+                        color = borderColor
                     )
                 },
                 modifier = Modifier
@@ -275,7 +275,8 @@ fun PokemonCard(
             Text(
                 text = "#${pokemon.id.toString().padStart(3, '0')}",
                 style = MaterialTheme.typography.labelSmall.copy(
-                    color = colorResource(R.color.grey1)
+                    color = colorResource(R.color.grey1),
+                    fontSize = 13.sp
                 ),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.End
@@ -286,7 +287,7 @@ fun PokemonCard(
                 modifier = Modifier
                     .size(80.dp)
                     .align(Alignment.CenterHorizontally),
-                error = painterResource(id = R.drawable.pokemon_placeholder),
+                error = painterResource(id = R.drawable.iconimgfailed),
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
