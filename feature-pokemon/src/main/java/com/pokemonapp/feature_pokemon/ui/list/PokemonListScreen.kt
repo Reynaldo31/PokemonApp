@@ -157,7 +157,7 @@ fun ImageWelcome(
 fun TextWelcome(modifier: Modifier = Modifier) {
     Text(
         buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Color(0xFF01243A))) {
+            withStyle(style = SpanStyle(color = colorResource(id=R.color.name_pokemon))) {
                 append("¡Hello, ")
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                     append("welcome")

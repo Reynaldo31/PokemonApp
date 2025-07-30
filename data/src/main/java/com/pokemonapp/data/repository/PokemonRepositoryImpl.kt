@@ -1,10 +1,14 @@
 package com.pokemonapp.data.repository
 
+import com.pokemonapp.core.constants.Constants.BASE_POKEMON_IMAGE_URL
 import com.pokemonapp.data.api.PokeApiService
 import com.pokemonapp.domain.model.Pokemon
 import com.pokemonapp.domain.model.PokemonListItem
 import com.pokemonapp.domain.model.Stat
 import com.pokemonapp.domain.repository.PokemonRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -19,22 +23,33 @@ class PokemonRepositoryImpl @Inject constructor(private val api: PokeApiService)
     override suspend fun getFirstGenerationPokemons(): List<PokemonListItem> {
         return cachedPokemons ?: run {
             val response = api.getPokemonList(limit = 151)
-            val pokemons = response.results.mapIndexed { index, result ->
-                val id = index + 1
+            val semaphore = kotlinx.coroutines.sync.Semaphore(permits = 10)
 
-                val details = try {
-                    api.getPokemonDetails(id)
-                } catch (e: Exception) {
-                    null
-                }
+            val pokemons = coroutineScope {
+                response.results.mapIndexed { index, result ->
+                    async {
+                        val id = index + 1
 
-                PokemonListItem(
-                    id = id,
-                    name = result.name.replaceFirstChar { it.uppercase() },
-                    imageUrl = details?.sprites?.other?.home?.frontDefault ?: "",
-                    types = details?.types?.map { it.type.name } ?: emptyList()
-                )
+                        semaphore.acquire()
+                        val details = try {
+                            api.getPokemonDetails(id)
+                        } catch (e: Exception) {
+                            null
+                        } finally {
+                            semaphore.release()
+                        }
+
+                        PokemonListItem(
+                            id = id,
+                            name = result.name.replaceFirstChar { it.uppercase() },
+                            imageUrl = details?.sprites?.other?.home?.frontDefault
+                                ?: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",
+                            types = details?.types?.map { it.type.name } ?: emptyList()
+                        )
+                    }
+                }.awaitAll()
             }
+
             cachedPokemons = pokemons
             pokemons
         }

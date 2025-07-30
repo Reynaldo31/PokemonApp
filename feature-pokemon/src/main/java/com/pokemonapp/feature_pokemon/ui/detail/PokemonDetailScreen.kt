@@ -409,8 +409,8 @@ fun StatItem(stat: Stat, primaryType: String? = null) {
             text = stat.name.replaceFirstChar { it.uppercase() },
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
-                .width(120.dp)
-                .padding(end = 4.dp),
+                .width(130.dp)
+                .padding(end = 3.dp),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -418,7 +418,7 @@ fun StatItem(stat: Stat, primaryType: String? = null) {
         Box(
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 4.dp)
                 .height(10.dp)
                 .background(
                     color = progressColor.copy(alpha = 0.2f),
@@ -440,8 +440,8 @@ fun StatItem(stat: Stat, primaryType: String? = null) {
             text = stat.value.toString(),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
-                .width(40.dp)
-                .padding(start = 4.dp),
+                .width(30.dp)
+                .padding(start = 3.dp),
             textAlign = TextAlign.End,
             fontWeight = FontWeight.Bold
         )
