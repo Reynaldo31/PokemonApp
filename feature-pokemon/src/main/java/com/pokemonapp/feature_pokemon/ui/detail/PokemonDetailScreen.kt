@@ -160,7 +160,6 @@ fun PokemonDetailContent(
         modifier = modifier
             .fillMaxSize()
             .background(Color.Transparent)
-            .padding((WindowInsets.statusBars.asPaddingValues()))
             .verticalScroll(rememberScrollState())
     ) {
         Box(
@@ -370,6 +369,8 @@ fun PokemonDetailContent(
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }

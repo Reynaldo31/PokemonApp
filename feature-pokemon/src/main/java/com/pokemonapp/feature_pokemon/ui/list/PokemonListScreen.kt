@@ -62,6 +62,8 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.pokemonapp.core.ui.components.ErrorView
 import com.pokemonapp.core.ui.components.LoadingView
+import com.pokemonapp.core.ui.components.NotFoundView
+import com.pokemonapp.core.ui.components.WarningView
 import com.pokemonapp.domain.model.PokemonListItem
 import com.pokemonapp.feature_pokemon.R
 import com.pokemonapp.feature_pokemon.viewModels.PokemonListState
@@ -120,6 +122,8 @@ fun PokemonListScreen(
             when (val currentState = state) {
                 is PokemonListState.Loading -> LoadingView()
                 is PokemonListState.Error -> ErrorView(message = currentState.message)
+                is PokemonListState.Warning -> WarningView(message = currentState.message)
+                is PokemonListState.NotFound -> NotFoundView(message = currentState.message)
                 is PokemonListState.Success -> PokemonGrid(
                     pokemons = currentState.pokemons,
                     onPokemonClick = onPokemonClick
