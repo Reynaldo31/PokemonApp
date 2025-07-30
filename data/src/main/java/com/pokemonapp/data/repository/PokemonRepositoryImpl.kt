@@ -72,7 +72,11 @@ class PokemonRepositoryImpl @Inject constructor(private val api: PokeApiService)
             } else {
                 allPokemons.filter {
                     it.name.contains(query, ignoreCase = true) ||
-                            it.id.toString() == query
+                            try {
+                                query.replace("#", "").trim().toInt() == it.id
+                            } catch (e: NumberFormatException) {
+                                false
+                            }
                 }
             }
         } catch (e: Exception) {

@@ -119,7 +119,7 @@ class PokemonListViewModel @Inject constructor(
                 }
 
                 if (results.isEmpty()) {
-                    _state.value = PokemonListState.Error("No Pokémon found for '$currentQuery'")
+                    _state.value = PokemonListState.NotFound("No Pokémon found for '$currentQuery'")
                 } else {
                     _state.value = PokemonListState.Success(results)
                 }
@@ -136,7 +136,11 @@ class PokemonListViewModel @Inject constructor(
     private suspend fun searchInCache(query: String): List<PokemonListItem> {
         return firstGenPokemons.filter {
             it.name.contains(query, ignoreCase = true) ||
-                    it.id.toString().startsWith(query)
+                    try {
+                        query.replace("#", "").trim().toInt() == it.id
+                    } catch (e: NumberFormatException) {
+                        false
+                    }
         }
     }
 }
@@ -147,4 +151,6 @@ sealed class PokemonListState {
     object Loading : PokemonListState()
     data class Success(val pokemons: List<PokemonListItem>) : PokemonListState()
     data class Error(val message: String) : PokemonListState()
+    data class Warning(val message: String) : PokemonListState()
+    data class NotFound(val message: String) : PokemonListState()
 }
