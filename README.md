@@ -156,11 +156,11 @@ Este proyecto está bajo la licencia MIT. Ver LICENSE para más detalles.
 
 ## FAQ
 - ¿Cómo cambio los colores de la app?
-   Edita los colores en core/src/main/res/values/colors.xml
+   - Edita los colores en core/src/main/res/values/colors.xml
 
 - ¿Cómo modifico la cantidad de Pokémon amostrar?
-   Modifica el parámetro limit en PokemonRepositoryImpl.kt
+   - Modifica el parámetro limit en PokemonRepositoryImpl.kt
 
 - ¿Cómo cambio la API base?
-   Edita PokeApiService.kt en el módulo data
+   - Edita PokeApiService.kt en el módulo data
 
