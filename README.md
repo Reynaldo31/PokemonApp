@@ -56,12 +56,12 @@ Aplicación Android desarrollada en Android Studio(Kotlin) que muestra informaci
    Haz clic en el botón "Run" (Shift+F10)
 
 ## Estructura del proyecto
-app/
-├── app/              # Módulo principal
-├── core/             # Módulo común (constants, extensions, ui.componets, utils, theme)
-├── data/             # Módulo de datos (api, di, dto, mapper, repository, responses)
-├── domain/           # Módulo de dominio (model, repository, usecase)
-└── feature-pokemon/  # Módulo de características (UI, ViewModels)
+- app/
+- ├── app/              # Módulo principal
+- ├── core/             # Módulo común (constants, extensions, ui.componets, utils, theme)
+- ├── data/             # Módulo de datos (api, di, dto, mapper, repository, responses)
+- ├── domain/           # Módulo de dominio (model, repository, usecase)
+- └── feature-pokemon/  # Módulo de características (UI, ViewModels)
 
 ## Git Flow
 
@@ -71,40 +71,40 @@ Ramas principales:
   
 Ramas de trabajo
 
-Para nuevas características:
-bash
-git checkout -b feature/nombre-caracteristica develop
+- Para nuevas características:
+   - bash
+   - git checkout -b feature/nombre-caracteristica develop
 
-Para releases:
-bash
-git checkout -b release/v1.0.0 develop
+- Para releases:
+   - bash
+   - git checkout -b release/v1.0.0 develop
 
-Para hotfixes:
-bash
-git checkout -b hotfix/nombre-fix main
+- Para hotfixes:
+   - bash
+   - git checkout -b hotfix/nombre-fix main
 
 ## Flujo de trabajo
 
 1. Crear ramas para cada característica:
-    ```bash
-   git checkout -b feature/pokemon-list
-   git checkout -b feature/pokemon-detail
+   -  ```bash
+   - git checkout -b feature/pokemon-list
+   - git checkout -b feature/pokemon-detail
     
 2. Desarrolla y haz commits descriptivos en ingles:
   git commit -m "feat: Implement Pokemon list screen with search functionality"
   git commit -m "fix: Resolve image loading issue in Pokemon detail"
   
 3. Crea un Pull Request a develop
-   git checkout develop
-   git merge --no-ff feature/pokemon-list
+   - git checkout develop
+   - git merge --no-ff feature/pokemon-list
    
 4. Crear ramas de release cuando esté listo para producción:
-   git checkout -b release/1.0.0
+   - git checkout -b release/1.0.0
    
 6. Para producción, crea rama de release y mergea a main
-  git checkout main
-  git merge --no-ff release/1.0.0
-  git tag -a v1.0.0 -m "Initial release"
+  - git checkout main
+  - git merge --no-ff release/1.0.0
+  - git tag -a v1.0.0 -m "Initial release"
 
 ## Arquitectura:
 
@@ -122,28 +122,28 @@ UI (Compose) → ViewModel → Use Cases ← Repositories ← Data Sources (API)
 ## Dependencias Principales:
 
 - Jetpack Compose
-   implementation('androidx.activity:activity-compose:1.8.0')
-   implementation("androidx.compose.ui:ui:1.5.0")
-   implementation("androidx.compose.material3:material3:1.10.0")
+   - implementation('androidx.activity:activity-compose:1.8.0')
+   - implementation("androidx.compose.ui:ui:1.5.0")
+   - implementation("androidx.compose.material3:material3:1.10.0")
 
 - Navigation
-   implementation("androidx.navigation:navigation-compose:2.7.7")
+   - implementation("androidx.navigation:navigation-compose:2.7.7")
 
 - Hilt (DI)
-   implementation("com.google.dagger:hilt-android:2.51.1")
-   kapt("com.google.dagger:hilt-compiler:2.0.21")
+   - implementation("com.google.dagger:hilt-android:2.51.1")
+   - kapt("com.google.dagger:hilt-compiler:2.0.21")
 
 - Retrofit (API)
-   implementation("com.squareup.retrofit2:retrofit:2.9.0")
-   implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+   - implementation("com.squareup.retrofit2:retrofit:2.9.0")
+   - implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
 - Coil (Imágenes)
-   implementation("io.coil-kt:coil-compose:2.7.0")
+   - implementation("io.coil-kt:coil-compose:2.7.0")
 
 - Pull-to-refresh
-   implementation("com.google.accompanist:accompanist-swiperefresh:0.27.0")
+   - implementation("com.google.accompanist:accompanist-swiperefresh:0.27.0")
 
-##Licencia
+## Licencia
 
 Este proyecto está bajo la licencia MIT. Ver LICENSE para más detalles.
 
